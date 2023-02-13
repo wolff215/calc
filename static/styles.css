@@ -1,0 +1,9 @@
+body {
+    background-color: bisque;
+    font-family: Arial, Helvetica, sans-serif, 'Times New Roman', Times, serif;
+}
+
+li {
+    padding-top: 20px;
+    font-size: larger;
+}

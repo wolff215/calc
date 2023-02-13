@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Weekly mileage</title>
+  </head>
+  <body>
+    <h1>Welcome {{ athlete }}, here are your results for the year so far:</h1>
+    <ul>
+      {% for entry in entries %}
+        <li>{{ entry|safe }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
