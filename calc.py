@@ -2,6 +2,7 @@ import stravalib
 import pickle
 import datetime
 import time
+import math
 
 result = []
 
@@ -20,6 +21,12 @@ MY_STRAVA_CLIENT_ID, MY_STRAVA_CLIENT_SECRET = open('client.secret').read().stri
 # access_token = client.exchange_code_for_token(client_id=MY_STRAVA_CLIENT_ID, client_secret=MY_STRAVA_CLIENT_SECRET, code=CODE)
 # with open('access_token.pickle', 'wb') as f:
 #     pickle.dump(access_token, f)
+
+class Week:
+    def __init__(self, week, mileage, week_avg):
+        self.week = week
+        self.mileage = mileage
+        self.week_avg = week_avg
 
 def check_token():
     # Read access token
@@ -95,12 +102,13 @@ def check_activities():
 
     # Compare the average weekly mileage to the actual weekly mileage
     for week, mileage in reversed(weekly_mileage.items()):
-        if mileage > average_mileage:
-            result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (ahead of goal of {average_mileage:.2f} miles)")
-        else:
-            result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (behind goal of {average_mileage:.2f} miles)")
-        average_mileage = (goal - mileage) / (num_weeks - week)
+    #    if mileage > average_mileage:
+    #        result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (ahead of goal of {average_mileage:.2f} miles)")
+    #    else:
+    #        result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (behind goal of {average_mileage:.2f} miles)")
+    #    average_mileage = (goal - mileage) / (num_weeks - week)
         week_num = week
+        result.append(Week(week, round(mileage, 2), average_mileage))
 
     # Print the total mileage for the year
     result.append(f"<b>Total mileage for the year:</b> {total_mileage:.2f} miles")
