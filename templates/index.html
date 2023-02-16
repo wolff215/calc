@@ -21,7 +21,7 @@
           {% for entry in entries[:-3] %}
             <tr>
               <td>{{ entry.week }}</td>
-              <td {% if entry.mileage < entry.week_avg %}style="background-color: #ffdddd;"{% endif %}>{{ entry.mileage }} miles</td>
+              <td {% if entry.mileage < entry.week_avg %}style="background-color: #ffdddd;"{% else %}style="background-color: #90EE90;"{% endif %}>{{ entry.mileage }} miles</td>
             </tr>
           {% endfor %}
         </tbody>
