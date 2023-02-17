@@ -108,7 +108,7 @@ def check_activities():
     #        result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (behind goal of {average_mileage:.2f} miles)")
     #    average_mileage = (goal - mileage) / (num_weeks - week)
         week_num = week
-        result.append(Week(week, round(mileage, 2), average_mileage))
+        result.append(Week(week, mileage, average_mileage))
 
     # Print the total mileage for the year
     result.append(f"<b>Total mileage for the year:</b> {total_mileage:.2f} miles")
