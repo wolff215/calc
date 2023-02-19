@@ -4,7 +4,7 @@ import datetime
 import time
 import math
 
-result = []
+# result = []
 
 # Strava API client setup
 client = stravalib.Client()
@@ -63,14 +63,17 @@ def athlete_info():
 
 def check_activities():
     check_token()
+
     # Get the authenticated athlete's activities
     activities = client.get_activities(after = "2023-01-01T06:00:00Z", before = "2024-1-1T06:00:00Z")
  
-    # Create an empty dictionary to store the weekly mileage
+    # Create an empty dictionary to store the weekly mileage and empty array to store result
     weekly_mileage = {}
-    #result = []
+    result = []
+
     # Loop through each activity
     for activity in activities:
+
         # Get the start date of the activity
         start_date = activity.start_date.date()
 
@@ -90,34 +93,31 @@ def check_activities():
     total_mileage = sum(weekly_mileage.values())
 
     # Ask the user for their mileage goal for the year
-    goal = 1200 #float(input("Enter your mileage goal for the year (in miles): "))
+    goal = 1200
 
     # Calculate the number of weeks in a year
-    num_weeks = 52
-    mileage_inc = 0
     week_num = 1
 
     # Calculate the average weekly mileage needed to achieve the goal
-    average_mileage = goal / num_weeks
+    average_mileage = goal / 52
 
     # Compare the average weekly mileage to the actual weekly mileage
     for week, mileage in reversed(weekly_mileage.items()):
-    #    if mileage > average_mileage:
-    #        result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (ahead of goal of {average_mileage:.2f} miles)")
-    #    else:
-    #        result.append(f"<b>Week {week}:</b> {mileage:.2f} miles (behind goal of {average_mileage:.2f} miles)")
-    #    average_mileage = (goal - mileage) / (num_weeks - week)
         week_num = week
         result.append(Week(week, mileage, average_mileage))
+        goal = goal - mileage
+        average_mileage = goal / (53 - week_num)
 
-    # Print the total mileage for the year
-    result.append(f"<b>Total mileage for the year:</b> {total_mileage:.2f} miles")
+    # Append the total mileage for the year
+    result.append(f"<b>Total mileage for the year:</b> {total_mileage:.3f} miles")
 
-    leftwks = 52 - week_num
-    leftavg = (goal - total_mileage) / leftwks
+    leftwks = 53 - week_num
+    leftavg = goal / leftwks
 
+    # Append the average mileage needed each remaining week
     result.append(f"<b>Weekly average remaining to make 1200 miles:</b> {leftavg:.3f} miles/week")
 
+    # Append the total remaining weeks
     result.append(f"<b>Remaining weeks:</b> {leftwks} weeks")
 
     return result
