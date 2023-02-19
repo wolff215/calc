@@ -3,9 +3,6 @@ from calc import check_activities, athlete_info
 
 app = Flask(__name__)
 
-# entries = check_activities()
-# athlete = athlete_info()
-
 @app.route('/')
 def index():
     entries = check_activities()
