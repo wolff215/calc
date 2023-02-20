@@ -93,7 +93,7 @@ def check_activities():
     total_mileage = sum(weekly_mileage.values())
 
     # Ask the user for their mileage goal for the year
-    goal = 1200
+    goal = goal_rem = 1200
 
     # Calculate the number of weeks in a year
     week_num = 1
@@ -105,17 +105,17 @@ def check_activities():
     for week, mileage in reversed(weekly_mileage.items()):
         week_num = week
         result.append(Week(week, mileage, average_mileage))
-        goal = goal - mileage
-        average_mileage = goal / (53 - week_num)
+        goal_rem = goal_rem - mileage
+        average_mileage = goal_rem / (53 - week_num)
 
     # Append the total mileage for the year
     result.append(f"<b>Total mileage for the year:</b> {total_mileage:.3f} miles")
 
     leftwks = 53 - week_num
-    leftavg = goal / leftwks
+    leftavg = goal_rem / leftwks
 
     # Append the average mileage needed each remaining week
-    result.append(f"<b>Weekly average remaining to make 1200 miles:</b> {leftavg:.3f} miles/week")
+    result.append(f"<b>Weekly average remaining to make {goal} miles:</b> {leftavg:.3f} miles/week")
 
     # Append the total remaining weeks
     result.append(f"<b>Remaining weeks:</b> {leftwks} weeks")
