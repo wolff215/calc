@@ -15,7 +15,6 @@ COPY . .
 
 # Set the environment variables for the app
 ENV FLASK_APP=app.py
-ENV FLASK_ENV=development
 
 # Specify the command to run the app
 CMD flask run --host=0.0.0.0
