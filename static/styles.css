@@ -2,10 +2,19 @@ body {
     background-color: #f2f2f2;
   }
   
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+  }
+
   .jumbotron {
     background-color: #337ab7;
     color: #fff;
     text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
   }
   
   .table th {
@@ -22,7 +31,7 @@ body {
   }
   
   .container {
-    margin-top: 50px;
+    margin-top: 15px;
   }
   
   h3 {
