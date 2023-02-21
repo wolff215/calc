@@ -6,11 +6,12 @@ body {
     position: sticky;
     top: 0;
     z-index: 9999;
-    background-color: #337ab7;
+    background-color: #1b4b75;
   }
 
   .navbar a {
     color: #e2dede;
+    font-size: larger;
   }
 
   .jumbotron {
