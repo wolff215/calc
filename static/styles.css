@@ -1,48 +1,70 @@
 body {
-    background-color: #e2dede;
-  }
-  
-  .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-    background-color: #1b4b75;
-  }
+  background-color: #e2dede;
+}
 
-  .navbar a {
-    color: #e2dede;
-    font-size: larger;
-  }
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background-color: #1b4b75;
+}
 
-  .jumbotron {
-    background-color: #337ab7;
-    color: #e2dede;
-    text-align: center;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .table th {
-    background-color: #337ab7;
-    color: #e2dede;
-    text-align: center;
-    font-size: 200%;
-    font-weight: bold;
-  }
-  
-  .table td {
-    text-align: center;
-    font-size: 175%;
-  }
-  
-  .container {
-    margin-top: 15px;
-  }
-  
-  h3 {
-    text-align: center;
-    margin-top: 30px;
-  }
+.navbar a {
+  color: #e2dede;
+  font-size: larger;
+}
 
-  
+.jumbotron {
+  background-color: #337ab7;
+  color: #e2dede;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.table th {
+  background-color: #337ab7;
+  color: #e2dede;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+}
+
+.table td {
+  text-align: center;
+  font-size: 175%;
+}
+
+.container {
+  margin-top: 15px;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.form-check-inline {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 5px;
+  width: 75px;
+  padding-bottom: 10px;
+}
+
+.form-check-input {
+  position: static;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+input[type=checkbox], input[type=radio] {
+  margin: 0px 5px 0;
+  margin-top: 1px\9;
+  line-height: normal;
+}
+
+label {
+  margin-bottom: 0px;
+}
