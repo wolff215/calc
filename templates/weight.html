@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Weight Data{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron text-center">
+      <h1 class="display-4">Welcome {{ athlete }}, here's your weight chart:</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+        <div id="myChart" style="height: 400px;" class="mw-100"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="card-title">Unit of Measurement</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="unit" id="lbs-radio" value="lbs" checked>
+              <label class="form-check-label" for="lbs-radio">
+                Lbs
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="unit" id="kg-radio" value="kg">
+              <label class="form-check-label" for="kg-radio">
+                Kg
+              </label>
+            </div>
+          </div>
+          <div class="jumbotron text-center">
+            <h3 class="display-4">Your latest weight is {{ weights[-1:][0][2] }} lbs!</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% block scripts %}
+<script>
+    window.wgt = [{% for weight in weights %}
+                    ['{{ weight[1][:10] }}', {{ weight[2] }}],
+                 {% endfor %}]
+</script>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
