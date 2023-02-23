@@ -21,7 +21,7 @@
           <tr>
             <td>{{ entry.week }}</td>
             <td {% if entry.mileage < entry.week_avg %}style="background-color: #ffdddd;"{% else %}style="background-color: #90EE90;"{% endif %}>
-              {{ entry.mileage|round(3) }} miles (
+              {{ entry.mileage|round(3) }} miles<br> (
               {% if entry.mileage < entry.week_avg %}
                   -{{ (entry.week_avg - entry.mileage)|round(3) }}
               {% else %}
