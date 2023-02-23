@@ -65,6 +65,7 @@ def check_token():
 
 
 def athlete_info():
+    check_token()
     athlete = client.get_athlete()
     return athlete.firstname
 
