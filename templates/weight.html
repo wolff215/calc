@@ -42,17 +42,22 @@
               <h2 class="card-title">Add a new weight:</h2>
             </div>
             <div class="card-body">
-              <form>
+              <form id="add-weight-form">
                 <div class="form-group">
                   <label for="date-input">Date:</label>
                   <input type="date" id="date-input" class="form-control">
                 </div>
                 <div class="form-group">
                   <label for="weight-input">Weight:</label>
-                  <input type="number" id="weight-input" class="form-control" step="0.01">
+                  <input type="number" id="weight-input" class="form-control" step="0.1">
                 </div>
-                <button type="button" class="btn btn-primary" id="add-weight-btn">Add Weight</button>
+                <button type="submit" class="btn btn-primary" id="add-weight-btn">Add Weight</button>
+                <button type="submit" class="btn btn-primary" id="edit-weight-btn">Edit Weight</button>
+                <button type="submit" class="btn btn-primary" id="remove-weight-btn">Remove Weight</button>
               </form>
+              <div>
+                <h2 id="btn-result"></h2>
+              </div>
             </div>
         </div>
       </div>

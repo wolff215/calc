@@ -179,3 +179,5 @@ def change_date(date_before, date_after):
     with open("weight_data.csv", mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerows(rows)
+        
+#add_weight(["1","2023-02-20T13:16:58.000Z","252.3"])

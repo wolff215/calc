@@ -7,6 +7,9 @@ google.charts.setOnLoadCallback(drawChart);
 // Get weight data from window object
 var wgt = window.wgt;
 
+// Get the HTML element for result display
+const resultDisplay = document.getElementById('btn-result');
+
 // Draw the chart using Google Charts library
 function drawChart() {
     
@@ -30,7 +33,7 @@ function drawChart() {
           'ui': {
             'labelStacking': 'vertical',
             'format': {
-              'pattern': 'MM/dd/yyyy'
+              'pattern': 'MMM dd YYYY'
             }
           }
         }
@@ -136,7 +139,53 @@ function drawChart() {
     // Get the HTML element for weight display
     const weightDisplay = document.querySelector('.jumbotron h3');
 
+    // Add an event listener for the 'select' event
+    google.visualization.events.addListener(chart, 'select', function() {
+        // Get the selected item from the chart
+        var selectedItem = chart.getChart().getSelection()[0];
+        if (selectedItem) {
+        // Get the date and weight values from the selected item
+        var date = data.getValue(selectedItem.row, 0);
+        var weight = data.getValue(selectedItem.row, 1);
+        
+        // Fill in the date and weight fields with the selected values
+        document.getElementById('date-input').value = date.toISOString().substring(0,10);
+        document.getElementById('weight-input').value = weight;
+        }
+    });
+
+
     // Draw the chart with the slider and chart wrapper
     dashboard.bind(dateRangeSlider, chart);
     dashboard.draw(data);
 };
+
+
+$("#add-weight-btn").click(function(event) {
+    event.preventDefault(); // prevent form submission
+
+    // get values from form inputs
+    var date = $("#date-input").val();
+    var weight = $("#weight-input").val();
+    var unit = $("input[name='unit']:checked").val();
+    var time = new Date().toISOString().slice(10);
+    date = date + time;
+
+    // send AJAX request to Flask endpoint
+    $.ajax({
+        url: "/add_weight",
+        type: "POST",
+        data: {
+            "date": date,
+            "weight": weight,
+            "unit": unit
+        },
+        success: function(response) {
+            console.log(response);
+            resultDisplay.textContent = response;
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
