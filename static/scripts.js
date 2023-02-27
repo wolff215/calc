@@ -122,7 +122,16 @@ function drawChart() {
     lbsRadio.addEventListener('change', function() {
         unit = 'lbs';
         convertToLbs(data);
-        weightDisplay.textContent = `Your latest weight is ${window.wgt.slice(-1)[0][1]} lbs!`;
+        latestWeight = window.wgt.slice(-1)[0][1];
+        olderWeight = window.wgt.slice(-2)[0][1];
+        if ( latestWeight > olderWeight) {
+            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
+            weightDisplay.style.color = 'red';
+        } else {
+            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
+            weightDisplay.style.color = 'green';
+        }
+        //weightDisplay.textContent = `Your latest weight is ${window.wgt.slice(-1)[0][1]} lbs!`;
         options.vAxis.title = 'Weight (' + unit + ')';
         dashboard.draw(data);
     });
@@ -131,7 +140,15 @@ function drawChart() {
     kgRadio.addEventListener('change', function() {
         unit = 'kg';
         convertToKg(data);
-        weightDisplay.textContent = `Your latest weight is ${Math.round(data.getValue((data.getNumberOfRows()-1), 1) * 10) / 10} kg!`;
+        latestWeight = Math.round(data.getValue((data.getNumberOfRows()-1), 1) * 10) / 10;
+        olderWeight = Math.round(data.getValue((data.getNumberOfRows()-2), 1) * 10) / 10;
+        if ( latestWeight > olderWeight) {
+            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
+            weightDisplay.style.color = 'red';
+        } else {
+            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
+            weightDisplay.style.color = 'green';
+        }
         options.vAxis.title = 'Weight (' + unit + ')';
         dashboard.draw(data);
     });

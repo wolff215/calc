@@ -58,6 +58,13 @@ h3 {
   margin-top: 30px;
 }
 
+#weight-info {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
 .form-check-inline {
   display: inline-flex;
   align-items: center;
