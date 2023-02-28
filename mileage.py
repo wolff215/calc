@@ -2,13 +2,12 @@ import stravalib
 import pickle
 import datetime
 import time
-import math
-import csv
 
 # Strava API client setup
 client = stravalib.Client()
 MY_STRAVA_CLIENT_ID, MY_STRAVA_CLIENT_SECRET = open('client.secret').read().strip().split(',')
 RESULT = []
+weight_file = "weight_datas.csv"
 
 # One time authentication steps
 # print (f"Client ID and secret read from file: {MY_STRAVA_CLIENT_ID}")
@@ -28,12 +27,6 @@ class Week:
         self.week = week
         self.mileage = mileage
         self.week_avg = week_avg
-
-# class Weight:
-#     def __init__(self, user_id, date, weight):
-#         self.user_id = user_id
-#         self.date = date
-#         self.weight = weight
 
 def check_token():
     # Read access token
@@ -62,7 +55,6 @@ def check_token():
         client.access_token = access_token['access_token']
         client.refresh_token = access_token['refresh_token']
         client.token_expires_at = access_token['expires_at']
-
 
 def athlete_info():
     check_token()
@@ -129,55 +121,3 @@ def check_activities():
     RESULT.append(f"<b>Remaining weeks:</b> {leftwks} weeks")
 
     return RESULT
-
-def athlete_weights():
-    RESULT = []
-
-    with open("weight_data.csv") as fn:
-        fr = csv.reader(fn)
-        next(fr)
-        RESULT = list(fr)
-    
-    return RESULT
-
-def add_weight(weight):
-    with open("weight_data.csv", mode="a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(weight)
-
-def remove_weight(weight):
-    with open("weight_data.csv", mode="r") as file:
-        reader = csv.reader(file)
-        rows = [row for row in reader if row != weight]
-
-    with open("weight_data.csv", mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerows(rows)
-
-def change_weight(weight_before, weight_after):
-    with open("weight_data.csv", mode="r") as file:
-        reader = csv.reader(file)
-        rows = []
-        for row in reader:
-            if int(row[1] == weight_before[1] and row[2] == weight_before[2]):
-                row[2] = str(weight_after[2])
-            rows.append(row)
-
-    with open("weight_data.csv", mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerows(rows)
-
-def change_date(date_before, date_after):
-    with open("weight_data.csv", mode="r") as file:
-        reader = csv.reader(file)
-        rows = []
-        for row in reader:
-            if int(row[1] == date_before[1] and row[2] == date_before[2]):
-                row[1] = str(date_after[1])
-            rows.append(row)
-
-    with open("weight_data.csv", mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerows(rows)
-        
-#add_weight(["1","2023-02-20T13:16:58.000Z","252.3"])

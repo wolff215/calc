@@ -6,6 +6,10 @@ google.charts.setOnLoadCallback(drawChart);
 
 // Get weight data from window object
 var wgt = window.wgt;
+console.log(wgt[1]);
+var old_date;
+var old_weight;
+var date;
 
 // Get the HTML element for result display
 const resultDisplay = document.getElementById('btn-result');
@@ -52,7 +56,7 @@ function drawChart() {
                     var kgValue = lbsValue * 0.453592;
 
                     // update the weight value in the DataTable
-                    data.setValue(i, j, kgValue);
+                    data.setValue(i, j, kgValue.toFixed(1));
                 }
             }
         }
@@ -71,7 +75,7 @@ function drawChart() {
                     var lbsValue = kgValue / 0.453592;
 
                     // update the weight value in the DataTable
-                    data.setValue(i, j, lbsValue);
+                    data.setValue(i, j, lbsValue.toFixed(1));
                 }
             }
         }
@@ -123,15 +127,7 @@ function drawChart() {
         unit = 'lbs';
         convertToLbs(data);
         latestWeight = window.wgt.slice(-1)[0][1];
-        olderWeight = window.wgt.slice(-2)[0][1];
-        if ( latestWeight > olderWeight) {
-            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
-            weightDisplay.style.color = 'red';
-        } else {
-            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
-            weightDisplay.style.color = 'green';
-        }
-        //weightDisplay.textContent = `Your latest weight is ${window.wgt.slice(-1)[0][1]} lbs!`;
+        weightDisplay.textContent = `Your latest weight is ${latestWeight} lbs!`;
         options.vAxis.title = 'Weight (' + unit + ')';
         dashboard.draw(data);
     });
@@ -141,14 +137,7 @@ function drawChart() {
         unit = 'kg';
         convertToKg(data);
         latestWeight = Math.round(data.getValue((data.getNumberOfRows()-1), 1) * 10) / 10;
-        olderWeight = Math.round(data.getValue((data.getNumberOfRows()-2), 1) * 10) / 10;
-        if ( latestWeight > olderWeight) {
-            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
-            weightDisplay.style.color = 'red';
-        } else {
-            weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
-            weightDisplay.style.color = 'green';
-        }
+        weightDisplay.textContent = `Your latest weight is ${latestWeight} kg!`;
         options.vAxis.title = 'Weight (' + unit + ')';
         dashboard.draw(data);
     });
@@ -163,7 +152,9 @@ function drawChart() {
         if (selectedItem) {
         // Get the date and weight values from the selected item
         var date = data.getValue(selectedItem.row, 0);
+        old_date = date;
         var weight = data.getValue(selectedItem.row, 1);
+        old_weight = weight;
         
         // Fill in the date and weight fields with the selected values
         document.getElementById('date-input').value = date.toISOString().substring(0,10);
@@ -185,8 +176,8 @@ $("#add-weight-btn").click(function(event) {
     var date = $("#date-input").val();
     var weight = $("#weight-input").val();
     var unit = $("input[name='unit']:checked").val();
-    var time = new Date().toISOString().slice(10);
-    date = date + time;
+    //var time = new Date().toISOString().slice(10);
+    //date = date + time;
 
     // send AJAX request to Flask endpoint
     $.ajax({
@@ -198,6 +189,37 @@ $("#add-weight-btn").click(function(event) {
             "unit": unit
         },
         success: function(response) {
+            console.log(response);
+            resultDisplay.textContent = response;
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
+
+$("#edit-weight-btn").click(function(event) {
+    event.preventDefault(); // prevent form submission
+
+    // get values from form inputs
+    //var date = $("#date-input").val();
+    var new_weight = $("#weight-input").val();
+    var unit = $("input[name='unit']:checked").val();
+    //var time = new Date().toISOString().slice(10);
+    //date = date + time;
+
+    // send AJAX request to Flask endpoint
+    $.ajax({
+        url: "/edit_weight",
+        type: "POST",
+        data: {
+            "date": old_date,
+            "new_weight": new_weight,
+            "old_weight": old_weight,
+            "unit": unit
+        },
+        success: function(response) {
+            console.log(["1", date, (old_weight).toString()]);
             console.log(response);
             resultDisplay.textContent = response;
         },
