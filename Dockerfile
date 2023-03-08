@@ -13,6 +13,8 @@ RUN pip install -r requirements.txt
 # Copy the rest of the app code to the container
 COPY . .
 
+RUN apt-get install -y build-essential libmariadb-dev
+
 # Set the environment variables for the app
 ENV FLASK_APP=app.py
 
