@@ -7,26 +7,27 @@ import time
 client = stravalib.Client()
 MY_STRAVA_CLIENT_ID, MY_STRAVA_CLIENT_SECRET = open('client.secret').read().strip().split(',')
 RESULT = []
-weight_file = "weight_datas.csv"
-
-# One time authentication steps
-# print (f"Client ID and secret read from file: {MY_STRAVA_CLIENT_ID}")
-
-# Print URL to receive code
-# url = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://127.0.0.1:5000/authorization', scope=['read_all','profile:read_all','activity:read_all'])
-# print(url)
-# CODE = '3b49305bef25f3763fbac76c2a588b4008755a69'
-
-# Use code received to get access token and save
-# access_token = client.exchange_code_for_token(client_id=MY_STRAVA_CLIENT_ID, client_secret=MY_STRAVA_CLIENT_SECRET, code=CODE)
-# with open('access_token.pickle', 'wb') as f:
-#     pickle.dump(access_token, f)
+current_year = datetime.datetime.now().year
 
 class Week:
     def __init__(self, week, mileage, week_avg):
         self.week = week
         self.mileage = mileage
         self.week_avg = week_avg
+
+# def setup_token():
+    # One time authentication steps
+    # print (f"Client ID and secret read from file: {MY_STRAVA_CLIENT_ID}")
+
+    # Print URL to receive code
+    # url = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://127.0.0.1:5000/authorization', scope=['read_all','profile:read_all','activity:read_all'])
+    # print(url)
+    # CODE = '3b49305bef25f3763fbac76c2a588b4008755a69'
+
+    # Use code received to get access token and save
+    # access_token = client.exchange_code_for_token(client_id=MY_STRAVA_CLIENT_ID, client_secret=MY_STRAVA_CLIENT_SECRET, code=CODE)
+    # with open('access_token.pickle', 'wb') as f:
+    #     pickle.dump(access_token, f)
 
 def check_token():
     # Read access token
@@ -65,7 +66,7 @@ def check_activities():
     check_token()
 
     # Get the authenticated athlete's activities
-    activities = client.get_activities(after = "2023-01-01T06:00:00Z", before = "2024-1-1T06:00:00Z")
+    activities = client.get_activities(after = datetime.datetime(current_year, 1, 1).strftime('%Y-%m-%dT%H:%M:%SZ'), before = datetime.datetime(current_year + 1, 1, 1).strftime('%Y-%m-%dT%H:%M:%SZ'))
  
     # Create an empty dictionary to store the weekly mileage and empty array to store result
     weekly_mileage = {}
@@ -108,16 +109,20 @@ def check_activities():
         goal_rem = goal_rem - mileage
         average_mileage = goal_rem / (53 - week_num)
 
-    # Append the total mileage for the year
-    RESULT.append(f"<b>Total mileage for the year:</b> {total_mileage:.3f} miles")
-
     leftwks = 53 - week_num
     leftavg = goal_rem / leftwks
+    estavg = ((total_mileage - RESULT[-1].mileage) / (week_num - 1)) * 52
 
+    # Append the total mileage for the year
+    RESULT.append(f"<b>Total mileage for the year:</b> {total_mileage:.3f} miles")
+    
     # Append the average mileage needed each remaining week
     RESULT.append(f"<b>Weekly average remaining to make {goal} miles:</b> {leftavg:.3f} miles/week")
 
     # Append the total remaining weeks
     RESULT.append(f"<b>Remaining weeks:</b> {leftwks} weeks")
+    
+    # Append estimated total if continuing on same mileage avg
+    RESULT.append(f"<b>If you continue at this weekly average you will walk:</b> {estavg:.3f} miles in {current_year}")
 
     return RESULT
