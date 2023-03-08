@@ -33,8 +33,8 @@
               </label>
             </div>
           </div>
-          <div class="jumbotron text-center"  {% if weights[-1:][0][2] < weights[-2:][0][2] %}style="background-color: #90EE90;"{% else %}style="background-color: #ffdddd;"{% endif %}>
-            <h3 id='weight-info' class="display-4" {% if weights[-1:][0][2] < weights[-2:][0][2] %}style="color: green;"{% else %}style="color: red;"{% endif %}>Your latest weight is {{ weights[-1:][0][2] }} lbs!</h3>
+          <div id='weight-card' class="jumbotron text-center"  {% if weights[-1:][0].weight < weights[-2:][0].weight %}style="background-color: #90EE90;"{% else %}style="background-color: #ffdddd;"{% endif %}>
+            <h3 id='weight-info' class="display-4" {% if weights[-1:][0].weight < weights[-2:][0].weight %}style="color: green;"{% else %}style="color: red;"{% endif %}>Your latest weight is {{ weights[-1:][0].weight }} lbs!</h3>
           </div>
         </div>
         <div class="card">
@@ -52,11 +52,11 @@
                   <input type="number" id="weight-input" class="form-control" step="0.1">
                 </div>
                 <button type="submit" class="btn btn-primary" id="add-weight-btn">Add Weight</button>
-                <button type="submit" class="btn btn-primary" id="edit-weight-btn">Edit Weight</button>
+                <!--<button type="submit" class="btn btn-primary" id="edit-weight-btn">Edit Weight</button>-->
                 <button type="submit" class="btn btn-primary" id="remove-weight-btn">Remove Weight</button>
               </form>
               <div>
-                <h2 id="btn-result"></h2>
+                <h5 id="btn-result"></h5>
               </div>
             </div>
         </div>
@@ -67,8 +67,10 @@
 {% block scripts %}
 <script>
     window.wgt = [{% for weight in weights %}
-                    [new Date('{{ weight[1] }}'), {{ weight[2] }}],
-                 {% endfor %}]
+                    [new Date('{{ weight.date }}'), {{ weight.weight }}],
+                 {% endfor %}];
+                 
+    window.ath = "{{ athlete }}";
 </script>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 {% endblock %}

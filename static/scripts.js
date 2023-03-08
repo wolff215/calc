@@ -6,13 +6,22 @@ google.charts.setOnLoadCallback(drawChart);
 
 // Get weight data from window object
 var wgt = window.wgt;
-console.log(wgt[1]);
+var ath = window.ath;
+wgt.sort((a, b) => {
+    const dateA = new Date(a[0]);
+    const dateB = new Date(b[0]);
+    return dateA - dateB;
+});
+var last_weight = wgt[wgt.length - 1][1];
 var old_date;
 var old_weight;
 var date;
 
 // Get the HTML element for result display
 const resultDisplay = document.getElementById('btn-result');
+
+// Get the HTML element for weight display
+const weightDisplay = document.querySelector('.jumbotron h3');
 
 // Draw the chart using Google Charts library
 function drawChart() {
@@ -142,9 +151,6 @@ function drawChart() {
         dashboard.draw(data);
     });
 
-    // Get the HTML element for weight display
-    const weightDisplay = document.querySelector('.jumbotron h3');
-
     // Add an event listener for the 'select' event
     google.visualization.events.addListener(chart, 'select', function() {
         // Get the selected item from the chart
@@ -161,7 +167,6 @@ function drawChart() {
         document.getElementById('weight-input').value = weight;
         }
     });
-
 
     // Draw the chart with the slider and chart wrapper
     dashboard.bind(dateRangeSlider, chart);
@@ -186,45 +191,113 @@ $("#add-weight-btn").click(function(event) {
         data: {
             "date": date,
             "weight": weight,
-            "unit": unit
+            "unit": unit,
+            "user": ath,
         },
         success: function(response) {
             console.log(response);
+            resultDisplay.style.color = '#333333';
             resultDisplay.textContent = response;
+            wgt.push([new Date(date), Number(weight)]);
+            wgt.sort((a, b) => {
+                const dateA = new Date(a[0]);
+                const dateB = new Date(b[0]);
+                return dateA - dateB;
+            });
+
+            drawChart();
+
+            if(wgt[wgt.length-2][1] > wgt[wgt.length-1][1]) {
+                document.getElementById('weight-card').style.backgroundColor = '#90EE90';
+                document.getElementById('weight-info').style.color = 'green';
+            } else {
+                document.getElementById('weight-card').style.backgroundColor = '#ffdddd';
+                document.getElementById('weight-info').style.color = 'red';
+            }
+            weightDisplay.textContent = `Your latest weight is ${wgt[wgt.length-1][1]} lbs!`;
         },
         error: function(error) {
-            console.log(error);
-        }
+            console.log(error.responseJSON.error);
+            resultDisplay.style.color = 'red';
+            resultDisplay.textContent = error.responseJSON.error;
+        }        
     });
 });
 
-$("#edit-weight-btn").click(function(event) {
+$("#remove-weight-btn").click(function(event) {
     event.preventDefault(); // prevent form submission
 
     // get values from form inputs
-    //var date = $("#date-input").val();
-    var new_weight = $("#weight-input").val();
-    var unit = $("input[name='unit']:checked").val();
-    //var time = new Date().toISOString().slice(10);
-    //date = date + time;
+    var date = $("#date-input").val();
+    var weight = $("#weight-input").val();
 
     // send AJAX request to Flask endpoint
     $.ajax({
-        url: "/edit_weight",
+        url: "/remove_weight",
         type: "POST",
         data: {
-            "date": old_date,
-            "new_weight": new_weight,
-            "old_weight": old_weight,
-            "unit": unit
+            "date": date,
+            "weight": weight,
+            "user": ath,
         },
         success: function(response) {
-            console.log(["1", date, (old_weight).toString()]);
             console.log(response);
+            resultDisplay.style.color = '#333333';
             resultDisplay.textContent = response;
+            const dateToRemove = new Date(date);
+            wgt = wgt.filter(([date, weight]) => date.getTime() !== dateToRemove.getTime());
+            wgt.sort((a, b) => {
+                const dateA = new Date(a[0]);
+                const dateB = new Date(b[0]);
+                return dateA - dateB;
+            });
+
+            drawChart();
+
+            if(wgt[wgt.length-2][1] > wgt[wgt.length-1][1]) {
+                document.getElementById('weight-card').style.backgroundColor = '#90EE90';
+                document.getElementById('weight-info').style.color = 'green';
+            } else {
+                document.getElementById('weight-card').style.backgroundColor = '#ffdddd';
+                document.getElementById('weight-info').style.color = 'red';
+            }
+            weightDisplay.textContent = `Your latest weight is ${wgt[wgt.length-1][1]} lbs!`;
         },
         error: function(error) {
-            console.log(error);
-        }
+            console.log(error.responseJSON.error);
+            resultDisplay.style.color = 'red';
+            resultDisplay.textContent = error.responseJSON.error;
+        }        
     });
 });
+
+// $("#edit-weight-btn").click(function(event) {
+//     event.preventDefault(); // prevent form submission
+// 
+//     // get values from form inputs
+//     //var date = $("#date-input").val();
+//     var new_weight = $("#weight-input").val();
+//     var unit = $("input[name='unit']:checked").val();
+//     //var time = new Date().toISOString().slice(10);
+//     //date = date + time;
+// 
+//     // send AJAX request to Flask endpoint
+//     $.ajax({
+//         url: "/edit_weight",
+//         type: "POST",
+//         data: {
+//             "date": old_date,
+//             "new_weight": new_weight,
+//             "old_weight": old_weight,
+//             "unit": unit
+//         },
+//         success: function(response) {
+//             console.log(["1", date, (old_weight).toString()]);
+//             console.log(response);
+//             resultDisplay.textContent = response;
+//         },
+//         error: function(error) {
+//             console.log(error);
+//         }
+//     });
+// });
