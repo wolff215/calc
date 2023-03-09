@@ -97,8 +97,8 @@ def change_date(date_before, date_after):
     print("TODO")
  
 def connect():
-    cnx = mysql.connector.connect(user='root',
-                                       password='hcmfjkz14y91',
+    cnx = mysql.connector.connect(user='user',
+                                       password='password',
                                        host='mariadb',
                                        database='weight_tracker')
     
