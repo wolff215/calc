@@ -13,7 +13,10 @@ weight_file = "weight_datas.csv"
 # print (f"Client ID and secret read from file: {MY_STRAVA_CLIENT_ID}")
 
 # Print URL to receive code
-# url = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://127.0.0.1:5000/authorization', scope=['read_all','profile:read_all','activity:read_all'])
+# url = client.authorization_url(
+#                            client_id=MY_STRAVA_CLIENT_ID,
+#                            redirect_uri='http://127.0.0.1:5000/authorization',
+#                            scope=['read_all','profile:read_all','activity:read_all'])
 # print(url)
 # CODE = '3b49305bef25f3763fbac76c2a588b4008755a69'
 

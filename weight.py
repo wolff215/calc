@@ -100,7 +100,6 @@ def remove_weight(weight):
     
     # Remove the weight from user_weight table
     query = "DELETE FROM user_weight WHERE measured_at = %s"
-    print(query)
     cursor.execute(query, (weight.date,))
           
     # Commit the changes and close the database connection
